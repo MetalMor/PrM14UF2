@@ -1,10 +1,9 @@
 (function (app) {
-    console.log('hola global');
     app.AppComponent = ng.core
         .Component({
             selector: 'aplicacio',
             template: '<global></global>',
-            directives: [app.Pomodoro, app.LlistaDone]
+            directives: [app.Pomodoro]
         })
         .Class({
             constructor: function () {}

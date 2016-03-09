@@ -21,7 +21,7 @@
                                     <h4><label class="label label-primary">{{ tasca.nom }}</label></h4>
                                 </td>
                                 <td>
-                                    <button  class="btn btn-primary" (click)="esborrarTasca(tasca)">Esborrar</button>
+                                    <button  class="btn btn-primary" (click)="eliminaTasca(tasca)"><div class="glyphicon glyphicon-remove"></div></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -33,30 +33,34 @@
 
         <div class="col-sm-4">
             <div class="panel panel-info">
-            <div class="panel-heading">Nova tasca</div>
+                <!-- AFEGIR TASQUES -->
+                <div class="panel-heading">Nova tasca</div>
                 <div class="panel-body">
                     <input #entrada>
-                    <button  class="btn btn-info" (click)="afegirTasca(entrada.value)">Afegir</button>
+                    <button  class="btn btn-info" (click)="afegirTasca(entrada.value)"><div class="glyphicon glyphicon-ok"></div></button>
                 </div>
+                <!-- ----- -->
             </div>
             <div class="panel panel-info">
+                <!-- TEMPS -->
                 <div class="panel-heading">Control del temps</div>
                 <div class="panel-body">
-                        <div class="col-md-4">
-                            <div class="col-md-5">
-                                <button  class="btn btn-info btn-xs" (click)="aturaComptador()"><div class="glyphicon glyphicon-pause"></div></button>
-                            </div>
-                            <div class="col-md-5">
-                                <button  class="btn btn-info btn-xs" (click)="resetComptador()"><div class="glyphicon glyphicon-play"></div></button>
-                            </div>
+                    <div class="col-md-4">
+                        <div class="col-md-5">
+                            <button  class="btn btn-info btn-xs" (click)="aturaComptador()"><div class="glyphicon glyphicon-pause"></div></button>
                         </div>
-                        <div class="col-md-4">
-                            <h4><label class="label label-info">{{ horaActual }}</label></h4>
+                        <div class="col-md-5">
+                            <button  class="btn btn-info btn-xs" (click)="resetComptador()"><div class="glyphicon glyphicon-play"></div></button>
                         </div>
-                        <div class="col-md-4">
-                            <h4><label class="label label-primary">{{ temps | formataTemps }}</label></h4>
-                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4><label class="label label-info">{{ horaActual }}</label></h4>
+                    </div>
+                    <div class="col-md-4">
+                        <h4><label class="label label-primary">{{ temps | formataTemps }}</label></h4>
+                    </div>
                 </div>
+                <!-- ----- -->
             </div>
         </div>
     </div>

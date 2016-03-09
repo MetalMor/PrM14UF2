@@ -26,7 +26,7 @@
             this.getAllStorage = function() {
                 console.log('getting storage');
                 var values = [];
-                 Object.keys(localStorage).forEach(function(key) {
+                Object.keys(localStorage).forEach(function(key) {
                     var tasca = localStorage.getItem(key);
                     if(key != 'debug')
                         values.push(JSON.parse(tasca));

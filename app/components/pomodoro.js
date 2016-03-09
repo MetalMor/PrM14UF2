@@ -8,7 +8,6 @@
  */
 
 (function(app) {
-    console.log('hola pomodoro');
 
   app.Pomodoro = ng.core
     .Component({
@@ -33,6 +32,15 @@
             /* Temps actual del comptador */
             this.temps = this.espera;
             /* Hora actual */
+            this.sound = {
+                finish: new Audio("app/sound/task_finish.mp3"),
+                remove: new Audio("app/sound/task_remove.mp3"),
+                add: new Audio("app/sound/task_add.mp3"),
+                time: new Audio("app/sound/time.mp3"),
+                play: function(s) {
+                    this[s].play();
+                }
+            };
             this.horaActual = this.carrega;
 
             // CONTROL DEL RELLOTGE/DATA
@@ -61,6 +69,7 @@
             /* Afegeix una tasca nova a la llista */
             this.afegirTasca = function(tasca) {
                 if(!this.isVoid(tasca)) {
+                    this.sound.add.play();
                     this.tasques.push(this.novaTasca(tasca));
                     this.initPrimera();
                 }
@@ -82,7 +91,12 @@
             this.parseTasca = function(tasca) {
                 if(this.timeOut()) tasca.setFinal(this.generaHora());
             };
-            /* Esborra una tasca de la llista */
+            /* Esborra una tasca abans de temps */
+            this.eliminaTasca = function(tasca) {
+                this.sound.play('remove');
+                this.esborrarTasca(tasca);
+            };
+            /* Finalitza una tasca de la llista */
             this.esborrarTasca = function(tasca) {
                 if (this.isPrimeraTasca(tasca)) {
                     this.tascaToLlista(tasca);
@@ -107,12 +121,15 @@
             // ACCIONS DEL TEMPS
             /* Elimina l'interval comptador per pausar el temps */
             this.aturaComptador = function() {
-                if(!this.emptyList())
+                if(!this.emptyList()) {
+                    this.sound.play('time');
                     clearInterval(this.interval);
+                }
             };
             /* Reestableix l'interval comptador per continuar */
             this.resetComptador = function() {
                 if (!this.emptyList())
+                    this.sound.play('time');
                     this.interval = setInterval(() => {
                         this.funcioComptadora();
                     }, 1000);
@@ -123,7 +140,6 @@
                     if(this.temps === this.espera)
                         this.initTemps();
                     this.comptar();
-                    this.mostraTemps();
                 } else {
                     this.temps = this.espera;
                 }
@@ -134,7 +150,10 @@
             /* Compta un segon (si arriba a 0, elimina la primera tasca de la llista) */
             this.comptar = function() {
                 this.temps -= 1000;
-                if (this.timeOut()) this.esborrarTasca(this.tasques[0]);
+                if (this.timeOut()) {
+                    this.esborrarTasca(this.tasques[0]);
+                    this.sound.play('finish');
+                }
             };
             /* Reestableix el temps del comptador al seu valor inicial */
             this.initTemps = function() {
