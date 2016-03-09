@@ -1,0 +1,114 @@
+(function(app) {
+  document.addEventListener('DOMContentLoaded', function() {
+      
+      app.Pomodoro = ng.core
+        .Component({
+            selector: 'aplicacio',
+            templateUrl: 'app/pomodoro_template.html'
+        })
+        
+        .Class({
+          constructor: function Pomodoro() {
+                this.tasques = [];
+                this.primera = "any";
+                this.tempsInicial = 10*1000;
+                this.temps = this.tempsInicial;
+                this.outTemps = "Carregant...";
+                this.espera = "Esperant...";
+              
+                // CONTROL DE LA LLISTA
+                this.afegirTasca = function (tasca) {
+                    /*if(this.emptyList())
+                        this.resetTemps();*/
+                    if(!this.isVoid(tasca) &&
+                      !this.tascaRepetida(tasca)) {
+                        this.tasques.push(tasca);
+                        this.initPrimera();
+                    }
+                };
+                this.esborrarTasca = function (tasca) {
+                    this.tasques.splice(this.tasques.indexOf(tasca), 1)
+                    if (this.isPrimeraTasca()) this.resetTemps();
+                    this.initPrimera();
+                };
+                /* funcio innecessaria
+                this.escriure = function ($event) {
+                    if ($event.which === 13) {
+                        this.afegirTasca($event.target.value);
+                        $event.target.value = null;
+                    }
+                }*/
+                // -----
+                
+                // ACCIONS DEL TEMPS (no implementat al template)
+                this.aturaComptador = function() {
+                    clearInterval(this.interval);
+                }
+                this.resetComptador = function() {
+                    setInterval(() => {
+                        if (!this.emptyList()) {
+                            this.comptar();
+                            this.mostraTemps();
+                        }
+                    }, 1000);
+                }
+                // -----
+                
+                // CONTROL DEL TEMPS
+                this.comptar = function() {
+                    this.temps -= 1000;
+                    if (this.timeOut()) this.esborrarTasca(this.tasques[0]);
+                };
+                this.minuts = function() {
+                    return Math.floor(this.temps / 60000) + 'min '
+                }
+                this.segons = function() {
+                    return ((this.temps % 60000) / 1000).toFixed(0) + 'sec';
+                }
+                this.mostraTemps = function() {
+                    this.outTemps = this.minuts() + this.segons();
+                };
+                this.resetTemps = function() {
+                    this.temps = this.initTemps();
+                }
+                this.initTemps = function() {
+                    this.temps = this.tempsInicial;
+                };
+                this.initPrimera = function() {
+                    this.primera = this.tasques[0];
+                }
+                this.interval = setInterval(() => {
+                    if (!this.emptyList()) {
+                        this.comptar();
+                        this.mostraTemps();
+                    } else
+                        this.temps = this.tempsInicial;
+                }, 1000);
+                this.resetInterval = this.interval;
+                this.pausa = function() {
+                    clearInterval(this.interval);
+                }
+                // -----
+              
+                // VALIDACIONS
+                this.isVoid = function(string) {
+                    return string == 0;
+                }
+                this.isPrimeraTasca = function(string) {
+                    return string == this.tasques[0];
+                }
+                this.emptyList = function() {
+                    return this.tasques.length <= 0;
+                }
+                this.tascaRepetida = function(tasca) {
+                    return this.tasques.indexOf(tasca) != -1;
+                }
+                this.timeOut = function() {
+                    return this.temps < 0;
+                }
+                // -----
+            }
+        })
+      
+  });
+})(window.app || (window.app = {}));
