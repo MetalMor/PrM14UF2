@@ -5,7 +5,6 @@
 		})
 		.Class({
 			constructor: function() {
-
                 this.minuts = function(temps) {
                     return Math.floor(temps / 60000) + 'min '
                 };
@@ -13,11 +12,14 @@
                     return ((temps % 60000) / 1000).toFixed(0) + 'sec';
                 };
                 this.mostraTemps = function(temps) {
-                    return this.minuts(temps) + this.segons(temps);
+                    return temps != 'Esperant...' ?
+                        this.minuts(temps) + this.segons(temps) :
+                        temps;
                 };
 			},
-			transform: function(temps, args) {
-				return this.mostraTemps(temps);
+			transform: function(temps) {
+				//return this.mostraTemps(args[0]);
+                return this.mostraTemps(temps);
 			}
 		})
 })(window.app || (window.app = {}));

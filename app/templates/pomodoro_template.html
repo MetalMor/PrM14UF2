@@ -11,26 +11,17 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>tasca</th>
-                                <th>temps</th>
-                                <th>operació</th>
+                                <th>Tasca</th>
+                                <th>Operació</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="#tasca of tasques">
                                 <td>
-                                    <h4><label class="label label-info">{{ tasca.nom }}</label></h4>
+                                    <h4><label class="label label-primary">{{ tasca.nom }}</label></h4>
                                 </td>
                                 <td>
-                                    <h4>
-                                        <label class="label label-info">
-                                            <span *ngIf="tasca == primera">{{ outTemps }}</span>
-                                            <span *ngIf="tasca != primera">{{ espera }}</span>
-                                        </label>
-                                    </h4>
-                                </td>
-                                <td>
-                                    <button  class="btn btn-default" (click)="esborrarTasca(tasca)">Esborra</button>
+                                    <button  class="btn btn-primary" (click)="esborrarTasca(tasca)">Esborrar</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -45,15 +36,26 @@
             <div class="panel-heading">Nova tasca</div>
                 <div class="panel-body">
                     <input #entrada>
-                    <button  class="btn btn-default" (click)="afegirTasca(entrada.value)">Afegeix</button>
+                    <button  class="btn btn-info" (click)="afegirTasca(entrada.value)">Afegir</button>
                 </div>
             </div>
             <div class="panel panel-info">
                 <div class="panel-heading">Control del temps</div>
                 <div class="panel-body">
-                    <button  class="btn btn-default" (click)="aturaComptador()"><div class="glyphicon glyphicon-pause"></div></button>
-                    <button  class="btn btn-default" (click)="resetComptador()"><div class="glyphicon glyphicon-play"></div></button>
-                    <h4><label class="label label-info">{{ horaActual }}</label></h4>
+                        <div class="col-md-4">
+                            <div class="col-md-5">
+                                <button  class="btn btn-info btn-xs" (click)="aturaComptador()"><div class="glyphicon glyphicon-pause"></div></button>
+                            </div>
+                            <div class="col-md-5">
+                                <button  class="btn btn-info btn-xs" (click)="resetComptador()"><div class="glyphicon glyphicon-play"></div></button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h4><label class="label label-info">{{ horaActual }}</label></h4>
+                        </div>
+                        <div class="col-md-4">
+                            <h4><label class="label label-primary">{{ temps | formataTemps }}</label></h4>
+                        </div>
                 </div>
             </div>
         </div>

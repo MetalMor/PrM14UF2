@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Registre de tasques</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Codi</th>
+                        <th>Nom</th>
+                        <th>Data</th>
+                        <th>Final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="#tasca of tasques">
+                        <td *ngIf="tasca.acabada" class="success">
+                            {{ tasca.id }}
+                        </td>
+                        <td *ngIf="!tasca.acabada" class="danger">
+                            {{ tasca.id }}
+                        </td>
+                        <td *ngIf="tasca.acabada" class="success">
+                            {{ tasca.nom }}
+                        </td>
+                        <td *ngIf="!tasca.acabada" class="danger">
+                            {{ tasca.nom }}
+                        </td>
+                        <td *ngIf="tasca.acabada" class="success">
+                            {{ tasca.data }}
+                        </td>
+                        <td *ngIf="!tasca.acabada" class="danger">
+                            {{ tasca.data }}
+                        </td>
+                        <td *ngIf="tasca.acabada" class="success">
+                            {{ tasca.final }}
+                        </td>
+                        <td *ngIf="!tasca.acabada" class="danger">
+                            {{ tasca.final }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
