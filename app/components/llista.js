@@ -12,7 +12,7 @@
   app.LlistaDone = ng.core
     .Component({
         selector: 'llista',
-        /*pipes: [app.Pipe],*/
+        pipes: [app.Comparator],
         templateUrl: 'app/templates/done_template.html'
     })
 
@@ -22,6 +22,8 @@
             this.tasques = [];
             /* Total de tasques mostrades al navegador */
             this.total = 0;
+            /* Patró d'ordre */
+            this.camp = 'final';
             /* Retorna l'array d'elements emmagatzemmats */
             this.getAllStorage = function() {
                 console.log('getting storage');
@@ -32,6 +34,11 @@
                         values.push(JSON.parse(tasca));
                 });
                 return values;
+            };
+            /* Actualitza el patró d'ordenació */
+            this.ordre = function(cmp) {
+                this.camp = cmp;
+                this.storageToLlista();
             };
             /* Actualitza la llista amb les dades del localStorage */
             this.storageToLlista = function() {

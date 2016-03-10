@@ -7,14 +7,14 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Codi</th>
-                        <th>Nom</th>
-                        <th>Data</th>
-                        <th>Final</th>
+                        <th (click)="ordre('id')"><h2><label class="label label-info">Codi</label></h2></th>
+                        <th (click)="ordre('nom')"><h2><label class="label label-info">Nom</label></h2></th>
+                        <th (click)="ordre('data')"><h2><label class="label label-info">Data</label></h2></th>
+                        <th (click)="ordre('data')"><h2><label class="label label-info">Final</label></h2></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#tasca of tasques">
+                    <tr *ngFor="#tasca of (tasques | ordenar:camp)">
                         <td *ngIf="tasca.acabada" class="success">
                             {{ tasca.id }}
                         </td>

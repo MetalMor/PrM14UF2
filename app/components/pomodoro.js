@@ -3,6 +3,8 @@
  * Realitza les tasques relacionades amb el comptador de temps, el rellotge i
  * el control de la llista temporal (no localStorage).
  *
+ * BUGS: els botons play i pause fan vaina si no s'utilitzen correctament (pausar varies vegades o play varies vegades)
+ *
  * @author mor
  *
  */
@@ -28,18 +30,22 @@
             /* Missatge d'espera del temporitzador */
             this.espera = "Esperant...";
             /* Temps inicial del comptador (milisegons) */
-            this.tempsInicial = 10*1000;
+            this.tempsInicial = 25*60*1000;
+            /* Per guardar l'estat del temps en cas de pausa */
+            this.tempsTmp = this.tempsInicial;
             /* Temps actual del comptador */
             this.temps = this.espera;
+            /* Flag per controlar la pausa */
+            this.pausa = false;
             /* Hora actual */
             this.sound = {
-                finish: new Audio("app/sound/task_finish.mp3"),
-                remove: new Audio("app/sound/task_remove.mp3"),
-                add: new Audio("app/sound/task_add.mp3"),
-                time: new Audio("app/sound/time.mp3"),
-                play: function(s) {
-                    this[s].play();
-                }
+                finish: new Audio("sound/task_finish.mp3"),
+                remove: new Audio("sound/task_remove.mp3"),
+                add: new Audio("sound/task_add.mp3"),
+                time: new Audio("sound/time.mp3")
+            };
+            this.playSound = function(s) {
+                this.sound[s].play();
             };
             this.horaActual = this.carrega;
 
@@ -93,14 +99,15 @@
             };
             /* Esborra una tasca abans de temps */
             this.eliminaTasca = function(tasca) {
-                this.sound.play('remove');
+                this.playSound('remove');
                 this.esborrarTasca(tasca);
             };
             /* Finalitza una tasca de la llista */
             this.esborrarTasca = function(tasca) {
                 if (this.isPrimeraTasca(tasca)) {
                     this.tascaToLlista(tasca);
-                    this.initTemps();
+                    this.resetTempsTmp();
+                    this.temps = this.espera;
                 }
                 this.tasques.splice(this.tasques.indexOf(tasca), 1);
                 this.initPrimera();
@@ -121,26 +128,28 @@
             // ACCIONS DEL TEMPS
             /* Elimina l'interval comptador per pausar el temps */
             this.aturaComptador = function() {
-                if(!this.emptyList()) {
-                    this.sound.play('time');
-                    clearInterval(this.interval);
+                if(!this.emptyList() &&
+                  !this.isPausa()) {
+                    this.playSound('time');
+                    this.switchPausa();
                 }
             };
             /* Reestableix l'interval comptador per continuar */
             this.resetComptador = function() {
-                if (!this.emptyList())
-                    this.sound.play('time');
-                    this.interval = setInterval(() => {
-                        this.funcioComptadora();
-                    }, 1000);
+                if (!this.emptyList() &&
+                   this.isPausa()) {
+                    this.playSound('time');
+                    this.switchPausa();
+                }
             };
             /* Funció que desenvolupa la tasca de comptar el temps */
             this.funcioComptadora = function() {
-                if (!this.emptyList()) {
+                if (!this.emptyList() &&
+                   !this.isPausa()) {
                     if(this.temps === this.espera)
                         this.initTemps();
                     this.comptar();
-                } else {
+                } else if(!this.isPausa()) {
                     this.temps = this.espera;
                 }
             };
@@ -152,21 +161,48 @@
                 this.temps -= 1000;
                 if (this.timeOut()) {
                     this.esborrarTasca(this.tasques[0]);
-                    this.sound.play('finish');
+                    this.playSound('finish');
                 }
             };
             /* Reestableix el temps del comptador al seu valor inicial */
             this.initTemps = function() {
-                this.temps = this.tempsInicial;
+                this.temps = this.temps === this.espera ?
+                    this.tempsInicial :
+                    this.tempsTmp;
             };
             /* Guarda la primera tasca de la llista a la propietat corresponent */
             this.initPrimera = function() {
                 this.primera = this.tasques[0];
             };
             /* Interval comptador */
-            this.interval = setInterval(() => {
-                this.funcioComptadora();
-            }, 1000);
+            this.establirInterval = function() {
+              this.interval = setInterval(() => {
+                        this.funcioComptadora();
+                    }, 1000);
+            };
+            /* Neteja l'interval */
+            this.netejaInterval = function() {
+                clearInterval(this.interval);
+                this.interval = 0;
+            };
+            this.isPausa = function() {
+                return this.pausa;
+            };
+            this.switchPausa = function() {
+                if(this.isPausa()) this.tempsTmp = this.temps;
+                this.pausa = this.canviaFlagPausa();
+            };
+            this.canviaFlagPausa = function() {
+                if(!this.isPausa()) this.temps = 'BREAK';
+                return !this.pausa;
+            };
+            this.resetTempsTmp = function() {
+                this.tempsTmp = this.tempsInicial;
+            };
+            this.resetTemps = function() {
+                if(this.isPausa()) this.tempsTmp = this.temps;
+            };
+            this.establirInterval();
             // -----
 
             // VALIDACIONS
