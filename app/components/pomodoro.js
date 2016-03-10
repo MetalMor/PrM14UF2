@@ -38,16 +38,18 @@
             /* Flag per controlar la pausa */
             this.pausa = false;
             /* Hora actual */
+            this.horaActual = this.carrega;
+            /* Objecte per emmagatzemar el so */
             this.sound = {
                 finish: new Audio("sound/task_finish.mp3"),
                 remove: new Audio("sound/task_remove.mp3"),
                 add: new Audio("sound/task_add.mp3"),
                 time: new Audio("sound/time.mp3")
             };
+            /* Reprodueix un so emmagatzemat a l'objecte sound */
             this.playSound = function(s) {
                 this.sound[s].play();
             };
-            this.horaActual = this.carrega;
 
             // CONTROL DEL RELLOTGE/DATA
             /* Retorna objecte Date */
@@ -185,23 +187,24 @@
                 clearInterval(this.interval);
                 this.interval = 0;
             };
+            /* Comprava el flag de pausa */
             this.isPausa = function() {
                 return this.pausa;
             };
+            /* Crida el canvi del flag de pausa i guarda/restableix el temps */
             this.switchPausa = function() {
                 if(this.isPausa()) this.temps = this.tempsTmp;
                 else this.tempsTmp = this.temps;
                 this.pausa = this.canviaFlagPausa();
             };
+            /* Canvia el flag de pausa */
             this.canviaFlagPausa = function() {
                 if(!this.isPausa()) this.temps = 'BREAK';
                 return !this.pausa;
             };
+            /* Restableix el temps temporal al valor inicial */
             this.resetTempsTmp = function() {
                 this.tempsTmp = this.tempsInicial;
-            };
-            this.resetTemps = function() {
-                if(this.isPausa()) this.tempsTmp = this.temps;
             };
             this.establirInterval();
             // -----

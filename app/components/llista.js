@@ -12,7 +12,7 @@
   app.LlistaDone = ng.core
     .Component({
         selector: 'llista',
-        pipes: [app.Comparator],
+        pipes: [app.Sort],
         templateUrl: 'app/templates/done_template.html'
     })
 

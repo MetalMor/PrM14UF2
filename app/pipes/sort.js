@@ -1,5 +1,5 @@
 (function(app) {
-    app.Comparator = ng.core
+    app.Sort = ng.core
 		.Pipe({
 			name: "ordenar"
 		})
@@ -23,5 +23,5 @@
                     return value;
                 }
 			}
-		});console.log('hola comparator')
+		})
 })(window.app || (window.app = {}));
