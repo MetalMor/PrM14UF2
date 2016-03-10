@@ -189,7 +189,8 @@
                 return this.pausa;
             };
             this.switchPausa = function() {
-                if(this.isPausa()) this.tempsTmp = this.temps;
+                if(this.isPausa()) this.temps = this.tempsTmp;
+                else this.tempsTmp = this.temps;
                 this.pausa = this.canviaFlagPausa();
             };
             this.canviaFlagPausa = function() {

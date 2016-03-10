@@ -26,7 +26,6 @@
             this.camp = 'final';
             /* Retorna l'array d'elements emmagatzemmats */
             this.getAllStorage = function() {
-                console.log('getting storage');
                 var values = [];
                 Object.keys(localStorage).forEach(function(key) {
                     var tasca = localStorage.getItem(key);
